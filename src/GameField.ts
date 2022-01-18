@@ -35,6 +35,7 @@ export class GameField implements IGameField {
     }
     return this.result[y][x];
   }
+
   nextStepCheck(y: number, x: number): number {
     if (y < 0 || y > this.height - 1 || x < 0 || x > this.width - 1) {
       return 0;
@@ -131,6 +132,7 @@ export class GameField implements IGameField {
       ? (this.bothStepsAreEqual = true)
       : (this.result = this.nextStepField);
   }
+
   afterNextGeneration() {
     this.afternextStepField = this.nextStepField.slice(0);
     for (let y = 0; y < this.height; y++) {

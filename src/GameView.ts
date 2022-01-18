@@ -10,6 +10,7 @@ export interface IGameView {
   onCellClick(cb: (x: number, y: number) => void);
   onGameStateChange(cb: (newState: boolean) => void);
   onFieldSizeChange(cb: (width: number, height: number) => void);
+  onStapeChange(cb: (stepDurationMs: number) => void);
 }
 export class GameView {
   el: HTMLElement;
@@ -54,7 +55,7 @@ export class GameView {
     });
 
     field.forEach((row, y) => {
-      row.forEach((cell, x) => {});
+      row.forEach((cell, x) => { });
     });
   }
 
@@ -102,6 +103,7 @@ export class GameView {
       cb(isRunning);
     });
   }
+
   onFieldSizeChange(cb: (width: number, height: number) => void) {
     let widthButton = this.el.querySelector(".field-size--width");
     let heightButton = this.el.querySelector(".field-size--height");
@@ -120,6 +122,7 @@ export class GameView {
       // app.updateGameState({ width: GameView.width, height: GameView.height });
     });
   }
+
   onStapeChange(cb: (stepDurationMs: number) => void) {
     let stepRange = this.el.querySelector(".range");
     let labelForrange = this.el.querySelector(".labelForrange");
@@ -136,6 +139,7 @@ export class GameView {
       runButton.dispatchEvent(new Event("click"));
     });
   }
+
   Counter(count: number, newState: boolean, allZero: boolean) {
     let labelCounter = this.el.querySelector(".labelCounter");
     labelCounter.innerHTML = `Step ${count}`;

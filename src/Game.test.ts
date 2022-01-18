@@ -13,12 +13,14 @@ describe("Game", () => {
   let onGameStateChange = jest.fn();
   let onFieldSizeChange = jest.fn();
   let onCellClick = jest.fn();
+  let onStapeChange = jest.fn();
 
   const getGameField = (): IGameField => ({
     getState: jest.fn(() => state),
     toggleCellState: jest.fn(),
     nextGeneration: jest.fn(),
-    setSize: jest.fn()
+    setSize: jest.fn(),
+    afterNextGeneration: jest.fn(),
   });
 
   const getGameView = (): IGameView => ({
@@ -32,7 +34,13 @@ describe("Game", () => {
     }),
     onFieldSizeChange: jest.fn((cb) => {
       onFieldSizeChange = jest.fn(cb);
-    })
+    }),
+    onStapeChange: jest.fn((cb) => {
+      onStapeChange = jest.fn(cb);
+    }),
+    nextStepGameField: jest.fn(),
+    changeCondition: jest.fn(),
+    Counter: jest.fn(),
   });
 
   beforeEach(() => {
