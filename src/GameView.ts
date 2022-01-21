@@ -1,31 +1,47 @@
 import { Cell } from "./types/Cell";
 
 export interface IGameView {
-  updateGameField(field: Cell[][]);
+  updateGameField(field: Cell[][]): void,
   updateGameState(state: {
     width?: number;
     height?: number;
     isRunning?: boolean;
-  });
-  onCellClick(cb: (x: number, y: number) => void);
-  onGameStateChange(cb: (newState: boolean) => void);
-  onFieldSizeChange(cb: (width: number, height: number) => void);
-  onStapeChange(cb: (stepDurationMs: number) => void);
-}
-export class GameView {
-  el: HTMLElement;
-  gameField: HTMLElement;
-  gameControls: HTMLElement;
-  static field: Cell[][];
-  static x: number;
-  static y: number;
-  static isRunning: boolean;
-  static width: number;
-  static height: number;
-  static table: HTMLElement;
-  count: number = 0;
+  }): void,
+  onCellClick(cb: (x: number, y: number) => void): void,
+  onGameStateChange(cb: (newState: boolean) => void): void,
+  onFieldSizeChange(cb: (width: number, height: number) => void): void,
+  onStapeChange(cb: (stepDurationMs: number) => void): void,
+  nextStepGameField(field: Cell[][]): void,
+  changeCondition(Condition: string): void,
+  Counter(count: number, newState: boolean, allZero: boolean): void,
+  isRunning: boolean,
+  count: number,
 
-  updateGameField(field: Cell[][]) {
+}
+export class GameView implements IGameView {
+  el: HTMLElement;
+
+  gameField: HTMLElement;
+
+  gameControls: HTMLElement;
+
+  static field: Cell[][];
+
+  static x: number;
+
+  static y: number;
+
+  isRunning: boolean;
+
+  static width: number;
+
+  static height: number;
+
+  static table: HTMLElement;
+
+  count = 0;
+
+  updateGameField(field: Cell[][]): void {
     this.gameField.innerHTML = "";
     GameView.table = document.createElement("table");
     GameView.table.classList.add("table");
@@ -45,17 +61,14 @@ export class GameView {
 
     this.gameField.append(GameView.table);
   }
-  nextStepGameField(field: Cell[][]) {
-    let cellAlive = this.el.querySelectorAll(".cell--alive");
+
+  nextStepGameField(field: Cell[][]): void {
+    const cellAlive = this.el.querySelectorAll(".cell--alive");
     cellAlive.forEach((cell) => {
       if (field[cell.dataset.y][cell.dataset.x] === 0) {
         cell.classList.remove("cell--alive");
         cell.classList.add("cell--deadInNextStep");
       }
-    });
-
-    field.forEach((row, y) => {
-      row.forEach((cell, x) => { });
     });
   }
 
@@ -63,115 +76,133 @@ export class GameView {
     width?: number;
     height?: number;
     isRunning?: boolean;
-  }) {
-    let runButton = this.el.querySelector(".run-button");
-    let widthSize = this.el.querySelector(".field-size--width");
-    let heightSize = this.el.querySelector(".field-size--height");
-    widthSize.setAttribute("value", String(state.width));
-    heightSize.setAttribute("value", String(state.height));
-    if (state.isRunning) {
-      GameView.isRunning = true;
-      runButton.classList.remove("run-button--stopped");
-      runButton.classList.add("run-button--runned");
-      runButton.innerHTML = "Stop";
-    } else {
-      GameView.isRunning = false;
-      runButton.classList.add("run-button--stopped");
-      runButton.classList.remove("run-button--runned");
-      runButton.innerHTML = "Play";
-    }
-  }
-
-  onCellClick(cb: (x: number, y: number) => void) {
-    let list = this.el.querySelector(".gameField");
-    list.addEventListener("click", function (ev) {
-      const el2 = ev.target;
-      if (el2) {
-        const x = Number(el2.dataset.x);
-        const y = Number(el2.dataset.y);
-        if (x >= 0 && y >= 0) {
-          cb(x, y);
-        }
+  }): void {
+    const runButton = this.el.querySelector(".run-button");
+    const widthSize = this.el.querySelector(".field-size--width");
+    const heightSize = this.el.querySelector(".field-size--height");
+    if (runButton && widthSize && heightSize) {
+      widthSize.setAttribute("value", String(state.width));
+      heightSize.setAttribute("value", String(state.height));
+      if (state.isRunning) {
+        this.isRunning = true;
+        runButton.classList.remove("run-button--stopped");
+        runButton.classList.add("run-button--runned");
+        runButton.innerHTML = "Stop";
+      } else {
+        this.isRunning = false;
+        runButton.classList.add("run-button--stopped");
+        runButton.classList.remove("run-button--runned");
+        runButton.innerHTML = "Play";
       }
-    });
+    }
+
   }
 
-  onGameStateChange(cb: (newState: boolean) => void) {
-    let runButton = this.el.querySelector(".run-button");
-    runButton.addEventListener("click", function () {
-      const isRunning = !GameView.isRunning;
-      cb(isRunning);
-    });
-  }
-
-  onFieldSizeChange(cb: (width: number, height: number) => void) {
-    let widthButton = this.el.querySelector(".field-size--width");
-    let heightButton = this.el.querySelector(".field-size--height");
-    widthButton.addEventListener("change", () => {
-      GameView.height = Number(heightButton.value);
-      GameView.width = Number(widthButton.value);
-
-      cb(GameView.width, GameView.height);
-      // app.updateGameState({ width: GameView.width, height: GameView.height });
-    });
-    heightButton.addEventListener("change", () => {
-      GameView.height = Number(heightButton.value);
-      GameView.width = Number(widthButton.value);
-
-      cb(GameView.width, GameView.height);
-      // app.updateGameState({ width: GameView.width, height: GameView.height });
-    });
-  }
-
-  onStapeChange(cb: (stepDurationMs: number) => void) {
-    let stepRange = this.el.querySelector(".range");
-    let labelForrange = this.el.querySelector(".labelForrange");
-    let runButton = this.el.querySelector(".run-button");
-    // const sleep = (x: number) => new Promise((resolve) => setTimeout(resolve, x));
-    stepRange.addEventListener("change", function () {
-      runButton.dispatchEvent(new Event("click"));
-      let valueStepRange = Number(stepRange.value);
-      const stepDurationMs = valueStepRange * 1000;
-      labelForrange.innerHTML = `Step duration ${valueStepRange} sec `;
-      console.log(stepDurationMs);
-      cb(stepDurationMs);
-      // await sleep(150);
-      runButton.dispatchEvent(new Event("click"));
-    });
-  }
-
-  Counter(count: number, newState: boolean, allZero: boolean) {
-    let labelCounter = this.el.querySelector(".labelCounter");
-    labelCounter.innerHTML = `Step ${count}`;
-    if (newState && allZero) {
-      let runButton = this.el.querySelector(".run-button");
-      this.count = 0;
-      runButton.dispatchEvent(new Event("click"));
+  onCellClick(cb: (x: number, y: number) => void): void {
+    const list = this.el.querySelector(".gameField");
+    if (list !== null) {
+      list.addEventListener("click", function (ev) {
+        const el2 = <HTMLInputElement>ev.target;
+        if (el2) {
+          const x = Number(el2.dataset.x);
+          const y = Number(el2.dataset.y);
+          if (x >= 0 && y >= 0) {
+            cb(x, y);
+          }
+        }
+      });
     }
   }
-  changeCondition(Condition: string) {
-    let labelCondition = this.el.querySelector(".labelCondition");
-    labelCondition.innerHTML = `Condition is: ${Condition} `;
+
+  onGameStateChange(cb: (newState: boolean) => void): void {
+    const runButton = this.el.querySelector(".run-button");
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const app = this;
+    if (runButton !== null) {
+      runButton.addEventListener("click", function () {
+        const isRunning = !app.isRunning;
+        cb(isRunning);
+      });
+    }
+  }
+
+  onFieldSizeChange(cb: (width: number, height: number) => void): void {
+    const widthButton = <HTMLInputElement>this.el.querySelector(".field-size--width");
+    const heightButton = <HTMLInputElement>this.el.querySelector(".field-size--height");
+    if (widthButton !== null && heightButton !== null) {
+      widthButton.addEventListener("change", () => {
+        GameView.height = Number(heightButton.value);
+        GameView.width = Number(widthButton.value);
+
+        cb(GameView.width, GameView.height);
+        // app.updateGameState({ width: GameView.width, height: GameView.height });
+      });
+      heightButton.addEventListener("change", () => {
+        GameView.height = Number(heightButton.value);
+        GameView.width = Number(widthButton.value);
+
+        cb(GameView.width, GameView.height);
+        // app.updateGameState({ width: GameView.width, height: GameView.height });
+      });
+    }
+  }
+
+  onStapeChange(cb: (stepDurationMs: number) => void): void {
+    const stepRange = <HTMLInputElement>this.el.querySelector(".range");
+    const labelForrange = this.el.querySelector(".labelForrange");
+    const runButton = this.el.querySelector(".run-button");
+    if (stepRange !== null && labelForrange !== null && runButton !== null) {
+      // const sleep = (x: number) => new Promise((resolve) => setTimeout(resolve, x));
+      stepRange.addEventListener("change", function () {
+        runButton.dispatchEvent(new Event("click"));
+        const valueStepRange = Number(stepRange.value);
+        const stepDurationMs = valueStepRange * 1000;
+        labelForrange.innerHTML = `Step duration ${valueStepRange} sec `;
+        console.log(stepDurationMs);
+        cb(stepDurationMs);
+        // await sleep(150);
+        runButton.dispatchEvent(new Event("click"));
+      });
+    }
+  }
+
+  Counter(count: number, newState: boolean, allZero: boolean): void {
+    const labelCounter = this.el.querySelector(".labelCounter");
+    const runButton = this.el.querySelector(".run-button");
+    if (labelCounter !== null && runButton !== null) {
+      labelCounter.innerHTML = `Step ${count}`;
+      if (newState && allZero) {
+        this.count = 0;
+        runButton.dispatchEvent(new Event("click"));
+      }
+    }
+  }
+
+  changeCondition(Condition: string): void {
+    const labelCondition = this.el.querySelector(".labelCondition");
+    if (labelCondition !== null) {
+      labelCondition.innerHTML = `Condition is: ${Condition} `;
+    }
   }
 
   constructor(el: HTMLElement) {
-    let gameField = document.createElement("div");
-    let gameControls = document.createElement("div");
+    const gameField = document.createElement("div");
+    const gameControls = document.createElement("div");
     function addEl() {
       gameField.classList.add("gameField");
       gameControls.classList.add("gameControls");
-      let inputwidth = document.createElement("INPUT");
-      let inputheight = document.createElement("INPUT");
-      let button = document.createElement("div");
-      let range = document.createElement("INPUT");
-      let divForWidth = document.createElement("div");
-      let divForHeight = document.createElement("div");
-      let divForrange = document.createElement("div");
-      let labelForWidth = document.createElement("label");
-      let labelForHeight = document.createElement("label");
-      let labelForrange = document.createElement("label");
-      let labelCounter = document.createElement("label");
-      let labelCondition = document.createElement("Condition");
+      const inputwidth = document.createElement("INPUT");
+      const inputheight = document.createElement("INPUT");
+      const button = document.createElement("div");
+      const range = document.createElement("INPUT");
+      const divForWidth = document.createElement("div");
+      const divForHeight = document.createElement("div");
+      const divForrange = document.createElement("div");
+      const labelForWidth = document.createElement("label");
+      const labelForHeight = document.createElement("label");
+      const labelForrange = document.createElement("label");
+      const labelCounter = document.createElement("label");
+      const labelCondition = document.createElement("Condition");
       inputwidth.setAttribute("type", "number");
       inputheight.setAttribute("type", "number");
       range.setAttribute("type", "range");
@@ -221,5 +252,7 @@ export class GameView {
     this.el = el;
     this.gameField = gameField;
     this.gameControls = gameControls;
+    this.isRunning = false;
+    this.count = 0;
   }
 }

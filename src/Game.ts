@@ -1,15 +1,22 @@
-import { GameField, IGameField } from "./GameField";
-import { GameView, IGameView } from "./GameView";
+import { IGameField } from "./GameField";
+import { IGameView } from "./GameView";
 import { Cell } from "./types/Cell";
 
-export interface IGame { }
+// export interface IGame {
+// }
+
 export class Game {
-  static gameField;
-  static gameView;
-  static timerId;
-  static width;
-  static height;
-  static stepDurationMs;
+  static gameField: IGameField;
+
+  static gameView: IGameView;
+
+  static timerId: ReturnType<typeof setInterval>;
+
+  static width: number;
+
+  static height: number;
+
+  static stepDurationMs: number;
 
   constructor(
     GameField: IGameField,
@@ -25,7 +32,7 @@ export class Game {
     Game.gameView.updateGameState({
       width: field[0].length,
       height: field.length,
-      isRunning: false
+      isRunning: false,
     });
     Game.gameView.onCellClick((x, y) => {
       field = Game.gameField.getState();
@@ -40,14 +47,14 @@ export class Game {
       Game.gameView.updateGameField(field);
       Game.gameView.updateGameState({
         width: field[0].length,
-        height: field.length
+        height: field.length,
       });
     });
     Game.gameView.onGameStateChange((newState: boolean) => {
       Game.gameView.updateGameState({
         width: field[0].length,
         height: field.length,
-        isRunning: newState
+        isRunning: newState,
       });
       Game.gameView.isRunning = newState;
       function intervel() {
@@ -56,7 +63,7 @@ export class Game {
         field = Game.gameField.getState();
         Game.gameView.updateGameField(field);
         Game.gameField.afterNextGeneration();
-        let field2 = Game.gameField.afternextStepField;
+        const field2 = Game.gameField.afternextStepField;
         Game.gameView.nextStepGameField(field2);
         let allZero = true;
         field.forEach((element) => {

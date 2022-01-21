@@ -12,7 +12,15 @@ table {
 }
 .labelCounter {
 }
-
+.gameControls {
+  border: 2px solid black;
+  width: fit-content;
+  margin: 5px;
+}
+.gameControls > div {
+  margin: 15px;
+  font-size: 25px;
+}
 .cell {
   border: 1px solid lightblue;
   color: lightgray;

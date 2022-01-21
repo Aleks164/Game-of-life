@@ -2,30 +2,41 @@ import { Cell } from "./types/Cell";
 
 export interface IGameField {
   getState(): Cell[][];
-  toggleCellState(x: number, y: number);
-  nextGeneration();
-  setSize(width: number, height: number);
+  toggleCellState(x: number, y: number): void;
+  nextGeneration(): void;
+  setSize(width: number, height: number): void;
+  afterNextGeneration(): void;
+  afternextStepField: Cell[][],
+  bothStepsAreEqual: boolean,
+  nextStepField: Cell[][],
+  width: number,
 }
 
 export class GameField implements IGameField {
   width: number;
+
   height: number;
+
   result: Cell[][];
+
   nextStepField: Cell[][];
+
   afternextStepField: Cell[][];
 
-  bothStepsAreEqual: boolean = false;
+  bothStepsAreEqual = false;
 
-  constructor(width: number = 0, height: number = 1) {
+  constructor(width = 0, height = 1) {
     this.width = width;
     this.height = height;
-    let result = Array.from(Array(this.height), () =>
+    const result = Array.from(Array(this.height), () =>
       height === 1 ? [] : Array(this.width).fill(0)
     );
     this.result = result;
+    this.nextStepField = result;
+    this.afternextStepField = result;
   }
 
-  getState() {
+  getState(): Cell[][] {
     return this.result;
   }
 
@@ -43,18 +54,18 @@ export class GameField implements IGameField {
     return this.nextStepField[y][x];
   }
 
-  toggleCellState(x: number, y: number) {
+  toggleCellState(x: number, y: number): void {
     this.result[y][x] = this.result[y][x] === 0 ? 1 : 0;
   }
 
-  setSize(width: number, height: number) {
+  setSize(width: number, height: number): void {
     this.width = width;
     this.height = height;
-    let curField = this.getState();
-    let difWidth = curField.length - height;
+    const curField = this.getState();
+    const difWidth = curField.length - height;
     function changeWidth() {
       for (let y = 0; y < height; y++) {
-        let difHeight = curField[y].length - width;
+        const difHeight = curField[y].length - width;
         if (curField[y].length < width) {
           for (let x = 0; x < Math.abs(difHeight); x++) {
             curField[y].push(0);
@@ -88,12 +99,12 @@ export class GameField implements IGameField {
     }
   }
 
-  nextGeneration() {
+  nextGeneration(): void {
     this.nextStepField = this.result.slice(0);
     for (let y = 0; y < this.height; y++) {
       this.nextStepField[y] = this.nextStepField[y].slice(0);
       for (let x = 0; x < this.width; x++) {
-        let counter =
+        const counter =
           this.check(y - 1, x - 1) +
           this.check(y, x - 1) +
           this.check(y + 1, x - 1) +
@@ -128,17 +139,20 @@ export class GameField implements IGameField {
         }
       }
     }
-    check
-      ? (this.bothStepsAreEqual = true)
-      : (this.result = this.nextStepField);
+    if (check) {
+      this.bothStepsAreEqual = true;
+    }
+    if (!check) {
+      this.result = this.nextStepField;
+    }
   }
 
-  afterNextGeneration() {
+  afterNextGeneration(): void {
     this.afternextStepField = this.nextStepField.slice(0);
     for (let y = 0; y < this.height; y++) {
       this.afternextStepField[y] = this.afternextStepField[y].slice(0);
       for (let x = 0; x < this.width; x++) {
-        let counter =
+        const counter =
           this.nextStepCheck(y - 1, x - 1) +
           this.nextStepCheck(y, x - 1) +
           this.nextStepCheck(y + 1, x - 1) +
