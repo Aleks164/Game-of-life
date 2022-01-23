@@ -6,10 +6,10 @@ export interface IGameField {
   nextGeneration(): void;
   setSize(width: number, height: number): void;
   afterNextGeneration(): void;
-  afternextStepField: Cell[][],
-  bothStepsAreEqual: boolean,
-  nextStepField: Cell[][],
-  width: number,
+  afternextStepField: Cell[][];
+  bothStepsAreEqual: boolean;
+  nextStepField: Cell[][];
+  // width: number;
 }
 
 export class GameField implements IGameField {

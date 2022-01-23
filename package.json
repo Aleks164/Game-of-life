@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage",
-    "lint": "prettier --check . && eslint . --ext .js,.ts && tsc --noEmit",
+    "lint": "prettier --write . && prettier --check . && eslint . --ext .js,.ts && tsc --noEmit",
     "lint:fix": "prettier --write . && eslint . --fix --ext .js,.ts",
     "start": "webpack serve --mode development",
     "build": "webpack --mode production"

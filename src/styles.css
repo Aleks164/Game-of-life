@@ -8,9 +8,13 @@ table {
   margin-left: 5px;
 }
 .labelCondition {
+  font-size: 20px;
   border: 1px solid black;
 }
 .labelCounter {
+  margin-left: 5px;
+  font-size: 20px;
+  margin-right: 5px;
 }
 .gameControls {
   border: 2px solid black;
@@ -18,7 +22,7 @@ table {
   margin: 5px;
 }
 .gameControls > div {
-  margin: 15px;
+  margin: 30px;
   font-size: 25px;
 }
 .cell {
@@ -38,9 +42,10 @@ table {
   border: 10px darkcyan solid;
 }
 .run-button {
+  display: inline-block;
   float: left;
   border: 1px solid black;
-  margin: 8px;
+  margin: 30px;
   width: 80px;
   font-size: 30px;
   text-align: center;

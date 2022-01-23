@@ -21,6 +21,9 @@ describe("Game", () => {
     nextGeneration: jest.fn(),
     setSize: jest.fn(),
     afterNextGeneration: jest.fn(),
+    afternextStepField: [[]],
+    bothStepsAreEqual: true,
+    nextStepField: [[]],
   });
 
   const getGameView = (): IGameView => ({
@@ -41,6 +44,8 @@ describe("Game", () => {
     nextStepGameField: jest.fn(),
     changeCondition: jest.fn(),
     Counter: jest.fn(),
+    isRunning: false,
+    count: 0,
   });
 
   beforeEach(() => {

@@ -1,4 +1,4 @@
-import { GameField } from "./GameField";
+import { GameField, IGameField } from "./GameField";
 
 describe("GameField", () => {
   describe("public interface", () => {
@@ -17,7 +17,7 @@ describe("GameField", () => {
   describe("functional tests", () => {
     const width = 2;
     const height = 3;
-    let gameField;
+    let gameField: IGameField;
     beforeEach(() => {
       gameField = new GameField(width, height);
     });

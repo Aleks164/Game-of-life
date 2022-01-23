@@ -63,11 +63,14 @@ describe("GameView", () => {
         [0, 0],
         [1, 0],
       ]);
-      el.querySelector(".cell.cell--alive").dispatchEvent(
-        new Event("click", {
-          bubbles: true,
-        })
-      );
+      const check = el.querySelector(".cell.cell--alive");
+      if (check != null) {
+        check.dispatchEvent(
+          new Event("click", {
+            bubbles: true,
+          })
+        );
+      }
 
       expect(onCellClick).toHaveBeenCalledWith(0, 1);
       el.querySelectorAll(".cell.cell--dead")[1].dispatchEvent(
@@ -82,16 +85,24 @@ describe("GameView", () => {
       expect(
         el.querySelector(".run-button.run-button--stopped")
       ).not.toBeNull();
-      expect(
-        el.querySelector(".run-button.run-button--stopped").innerHTML
-      ).toBe("Play");
+      if (el != null) {
+        const checkNull = el.querySelector(".run-button.run-button--stopped");
+        if (checkNull != null) {
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(checkNull.innerHTML).toBe("Play");
+        }
+      }
 
       gameView.updateGameState({ isRunning: true, width: 3, height: 3 });
       expect(el.querySelector(".run-button.run-button--stopped")).toBeNull();
       expect(el.querySelector(".run-button.run-button--runned")).not.toBeNull();
-      expect(el.querySelector(".run-button.run-button--runned").innerHTML).toBe(
-        "Stop"
-      );
+      if (el != null) {
+        const checkNull = el.querySelector(".run-button.run-button--runned");
+        if (checkNull != null) {
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(checkNull.innerHTML).toBe("Stop");
+        }
+      }
       expect(
         Number(
           (el.querySelector(
@@ -110,9 +121,14 @@ describe("GameView", () => {
       expect(
         el.querySelector(".run-button.run-button--stopped")
       ).not.toBeNull();
-      expect(
-        el.querySelector(".run-button.run-button--stopped").innerHTML
-      ).toBe("Play");
+
+      if (el != null) {
+        const checkNull = el.querySelector(".run-button.run-button--stopped");
+        if (checkNull != null) {
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(checkNull.innerHTML).toBe("Play");
+        }
+      }
       expect(
         Number(
           (el.querySelector(
@@ -132,20 +148,24 @@ describe("GameView", () => {
       const onGameStateChange = jest.fn();
       gameView.onGameStateChange(onGameStateChange); // replaced
       gameView.updateGameState({ isRunning: true, width: 2, height: 1 });
-      el.querySelector(".run-button.run-button--runned").dispatchEvent(
-        new Event("click", {
-          bubbles: true,
-        })
-      );
-
+      let check = el.querySelector(".run-button.run-button--runned");
+      if (check != null) {
+        check.dispatchEvent(
+          new Event("click", {
+            bubbles: true,
+          })
+        );
+      }
       expect(onGameStateChange).toHaveBeenCalledWith(false);
       gameView.updateGameState({ isRunning: false, width: 2, height: 1 });
-      el.querySelector(".run-button.run-button--stopped").dispatchEvent(
-        new Event("click", {
-          bubbles: true,
-        })
-      );
-
+      check = el.querySelector(".run-button.run-button--stopped");
+      if (check != null) {
+        check.dispatchEvent(
+          new Event("click", {
+            bubbles: true,
+          })
+        );
+      }
       expect(onGameStateChange).toHaveBeenCalledWith(true);
     });
     it("calls onFieldSizeChange on field size change interaction", () => {
