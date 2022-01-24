@@ -56,6 +56,43 @@ describe("GameView", () => {
       expect(el.querySelectorAll(".cell.cell--alive").length).toBe(3);
       expect(el.querySelectorAll(".cell.cell--dead").length).toBe(3);
     });
+    it("renders field from .nextStepGameField", () => {
+      gameView.updateGameField([
+        [0, 1],
+        [1, 0],
+      ]);
+      gameView.nextStepGameField([
+        [0, 0],
+        [0, 0],
+      ]);
+      expect(el.querySelectorAll(
+        ".cell"
+      ).length).toBe(4);
+      expect(el.querySelectorAll(".cell.cell--alive").length).toBe(0);
+      expect(el.querySelectorAll(".cell.cell--deadInNextStep").length).toBe(2);
+      gameView.updateGameField([
+        [1, 1],
+        [1, 0],
+      ]);
+      gameView.nextStepGameField([
+        [1, 1],
+        [1, 1],
+      ]);
+      expect(el.querySelectorAll(".cell").length).toBe(4);
+      expect(el.querySelectorAll(".cell.cell--alive").length).toBe(3);
+      expect(el.querySelectorAll(".cell.cell--deadInNextStep").length).toBe(0);
+      gameView.updateGameField([
+        [0, 0, 1],
+        [1, 0, 1],
+      ]);
+      gameView.nextStepGameField([
+        [0, 1, 0],
+        [0, 1, 0],
+      ]);
+      expect(el.querySelectorAll(".cell").length).toBe(6);
+      expect(el.querySelectorAll(".cell.cell--alive").length).toBe(0);
+      expect(el.querySelectorAll(".cell.cell--deadInNextStep").length).toBe(3);
+    });
     it("calls funciton from .onCellClick on field interaction", () => {
       const onCellClick = jest.fn();
       gameView.onCellClick(onCellClick);
@@ -167,6 +204,21 @@ describe("GameView", () => {
         );
       }
       expect(onGameStateChange).toHaveBeenCalledWith(true);
+    });
+    it("Counter is working", () => {
+      const labelCounter = el.querySelector(".labelCounter");
+      if (labelCounter != null) {
+        gameView.Counter(4, true, false);
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(labelCounter.innerHTML).toBe(`Step 4`);
+      }
+      if (labelCounter != null) {
+        gameView.Counter(4, true, true);
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(labelCounter.innerHTML).toBe(`Step 4`);
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(gameView.count).toBe(0);
+      }
     });
     it("calls onFieldSizeChange on field size change interaction", () => {
       const onFieldSizeChange = jest.fn();
