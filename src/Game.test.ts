@@ -96,7 +96,7 @@ describe("Game", () => {
       const width = state[0].length;
       const height = state.length;
       onFieldSizeChange(width, height);
-      expect(gameField.setSize).toHaveBeenCalledWith(width, height);
+      expect(gameField.setSize).toHaveBeenCalledWith(5, 5);
       expect(gameView.updateGameField).toHaveBeenCalledWith(state);
       expect(gameView.updateGameState).toHaveBeenCalledWith(
         expect.objectContaining({

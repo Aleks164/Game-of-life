@@ -225,7 +225,6 @@ describe("GameView", () => {
         // eslint-disable-next-line jest/no-conditional-expect
         expect(labelCondition.innerHTML).toBe(`Condition is: some text `);
       }
-
     });
     it("calls onFieldSizeChange on field size change interaction", () => {
       const onFieldSizeChange = jest.fn();

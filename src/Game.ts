@@ -40,10 +40,26 @@ export class Game {
       Game.gameField.toggleCellState(x, y);
       Game.gameView.updateGameField(field);
     });
+    let fixWidth;
+    let fixHeight;
     Game.gameView.onFieldSizeChange((width, height) => {
-      Game.width = width;
-      Game.height = height;
-      Game.gameField.setSize(width, height);
+      fixWidth = width;
+      fixHeight = height;
+      if (width > 20) {
+        fixWidth = 20;
+      }
+      if (width < 5) {
+        fixWidth = 5;
+      }
+      if (height > 20) {
+        fixHeight = 20;
+      }
+      if (height < 5) {
+        fixHeight = 5;
+      }
+      Game.width = fixWidth;
+      Game.height = fixHeight;
+      Game.gameField.setSize(fixWidth, fixHeight);
       field = Game.gameField.getState();
       Game.gameView.updateGameField(field);
       Game.gameView.updateGameState({
