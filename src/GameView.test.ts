@@ -65,9 +65,7 @@ describe("GameView", () => {
         [0, 0],
         [0, 0],
       ]);
-      expect(el.querySelectorAll(
-        ".cell"
-      ).length).toBe(4);
+      expect(el.querySelectorAll(".cell").length).toBe(4);
       expect(el.querySelectorAll(".cell.cell--alive").length).toBe(0);
       expect(el.querySelectorAll(".cell.cell--deadInNextStep").length).toBe(2);
       gameView.updateGameField([
@@ -205,20 +203,29 @@ describe("GameView", () => {
       }
       expect(onGameStateChange).toHaveBeenCalledWith(true);
     });
-    it("Counter is working", () => {
+    it("counter is working", () => {
       const labelCounter = el.querySelector(".labelCounter");
       if (labelCounter != null) {
-        gameView.Counter(4, true, false);
+        gameView.counter(4, true, false);
         // eslint-disable-next-line jest/no-conditional-expect
         expect(labelCounter.innerHTML).toBe(`Step 4`);
       }
       if (labelCounter != null) {
-        gameView.Counter(4, true, true);
+        gameView.counter(4, true, true);
         // eslint-disable-next-line jest/no-conditional-expect
         expect(labelCounter.innerHTML).toBe(`Step 4`);
         // eslint-disable-next-line jest/no-conditional-expect
         expect(gameView.count).toBe(0);
       }
+    });
+    it("change condition is work", () => {
+      const labelCondition = el.querySelector(".labelCondition");
+      if (labelCondition != null) {
+        gameView.changeCondition("some text");
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(labelCondition.innerHTML).toBe(`Condition is: some text `);
+      }
+
     });
     it("calls onFieldSizeChange on field size change interaction", () => {
       const onFieldSizeChange = jest.fn();

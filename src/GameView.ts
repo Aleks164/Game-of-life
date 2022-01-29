@@ -13,7 +13,7 @@ export interface IGameView {
   onStapeChange(cb: (stepDurationMs: number) => void): void;
   nextStepGameField(field: Cell[][]): void;
   changeCondition(Condition: string): void;
-  Counter(count: number, newState: boolean, allZero: boolean): void;
+  counter(count: number, newState: boolean, allZero: boolean): void;
   isRunning: boolean;
   count: number;
 }
@@ -138,20 +138,43 @@ export class GameView implements IGameView {
     const heightButton = <HTMLInputElement>(
       this.el.querySelector(".field-size--height")
     );
-    if (widthButton !== null && heightButton !== null) {
+    const runButton = this.el.querySelector(".run-button");
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const app = this;
+    if (widthButton !== null && heightButton !== null && runButton !== null) {
       widthButton.addEventListener("change", () => {
-        GameView.height = Number(heightButton.value);
-        GameView.width = Number(widthButton.value);
-
-        cb(GameView.width, GameView.height);
-        // app.updateGameState({ width: GameView.width, height: GameView.height });
+        if (!app.isRunning) {
+          GameView.height = Number(heightButton.value);
+          GameView.width = Number(widthButton.value);
+          cb(GameView.width, GameView.height);
+        } else {
+          if (app.isRunning) {
+            runButton.dispatchEvent(new Event("click"));
+          }
+          GameView.height = Number(heightButton.value);
+          GameView.width = Number(widthButton.value);
+          cb(GameView.width, GameView.height);
+          if (!app.isRunning && runButton !== null) {
+            runButton.dispatchEvent(new Event("click"));
+          }
+        }
       });
       heightButton.addEventListener("change", () => {
-        GameView.height = Number(heightButton.value);
-        GameView.width = Number(widthButton.value);
-
-        cb(GameView.width, GameView.height);
-        // app.updateGameState({ width: GameView.width, height: GameView.height });
+        if (!app.isRunning) {
+          GameView.height = Number(heightButton.value);
+          GameView.width = Number(widthButton.value);
+          cb(GameView.width, GameView.height);
+        } else {
+          if (app.isRunning) {
+            runButton.dispatchEvent(new Event("click"));
+          }
+          GameView.height = Number(heightButton.value);
+          GameView.width = Number(widthButton.value);
+          cb(GameView.width, GameView.height);
+          if (!app.isRunning && runButton !== null) {
+            runButton.dispatchEvent(new Event("click"));
+          }
+        }
       });
     }
   }
@@ -161,21 +184,18 @@ export class GameView implements IGameView {
     const labelForrange = this.el.querySelector(".labelForrange");
     const runButton = this.el.querySelector(".run-button");
     if (stepRange !== null && labelForrange !== null && runButton !== null) {
-      // const sleep = (x: number) => new Promise((resolve) => setTimeout(resolve, x));
-      stepRange.addEventListener("change", function () {
+      stepRange.addEventListener("change", () => {
         runButton.dispatchEvent(new Event("click"));
         const valueStepRange = Number(stepRange.value);
         const stepDurationMs = valueStepRange * 1000;
         labelForrange.innerHTML = `Step duration ${valueStepRange} sec `;
-        console.log(stepDurationMs);
         cb(stepDurationMs);
-        // await sleep(150);
         runButton.dispatchEvent(new Event("click"));
       });
     }
   }
 
-  Counter(count: number, newState: boolean, allZero: boolean): void {
+  counter(count: number, newState: boolean, allZero: boolean): void {
     const labelCounter = this.el.querySelector(".labelCounter");
     const runButton = this.el.querySelector(".run-button");
     if (labelCounter !== null && runButton !== null) {
@@ -223,45 +243,39 @@ export class GameView implements IGameView {
       inputwidth.setAttribute("max", "20");
       inputheight.setAttribute("min", "5");
       inputheight.setAttribute("max", "20");
-      inputwidth.classList.add("field-size");
-      inputheight.classList.add("field-size");
-      inputwidth.classList.add("field-size--width");
-      inputheight.classList.add("field-size--height");
+      inputwidth.classList.add("field-size", "field-size--width");
+      inputheight.classList.add("field-size", "field-size--height");
       labelForrange.classList.add("labelForrange");
       labelCounter.classList.add("labelCounter");
       labelCondition.classList.add("labelCondition");
       range.classList.add("range");
-      button.classList.add("run-button");
-      button.classList.add("run-button--stopped");
+      button.classList.add("run-button", "run-button--stopped");
       labelCounter.innerHTML = "Step 0";
       button.innerHTML = "Play";
       labelCondition.innerHTML = "Condition is: waiting for srart ";
       labelForWidth.innerHTML = "Width";
       labelForHeight.innerHTML = "Height";
       labelForrange.innerHTML = "Step duration 1 sec";
-      divForWidth.appendChild(labelForWidth);
-      divForWidth.appendChild(inputwidth);
-      divForHeight.appendChild(labelForHeight);
-      divForHeight.appendChild(inputheight);
-      divForrange.appendChild(labelForrange);
-      divForrange.appendChild(range);
-      gameControls.appendChild(divForWidth);
-      gameControls.appendChild(divForHeight);
-      gameControls.appendChild(divForrange);
-      gameControls.appendChild(button);
-      gameControls.appendChild(labelCondition);
-      gameControls.appendChild(labelCounter);
+      divForWidth.append(labelForWidth, inputwidth);
+      divForHeight.append(labelForHeight, inputheight);
+      divForrange.append(labelForrange, range);
+      gameControls.append(
+        divForWidth,
+        divForHeight,
+        divForrange,
+        button,
+        labelCondition,
+        labelCounter
+      );
 
-      el.appendChild(gameControls);
-      el.appendChild(gameField);
+      el.append(gameControls, gameField);
 
-      document.body.append(el);
+      document.body.appendChild(el);
     }
     addEl();
     this.el = el;
     this.gameField = gameField;
     this.gameControls = gameControls;
-    // this.isRunning = false;
     this.count = 0;
   }
 }

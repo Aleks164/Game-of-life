@@ -1,6 +1,5 @@
 import { IGameField } from "./GameField";
 import { IGameView } from "./GameView";
-import { Cell } from "./types/Cell";
 
 // export interface IGame {
 // }
@@ -17,6 +16,8 @@ export class Game {
   static height: number;
 
   static stepDurationMs: number;
+
+  static isRunning: boolean;
 
   constructor(
     GameField: IGameField,
@@ -57,6 +58,7 @@ export class Game {
         isRunning: newState,
       });
       Game.gameView.isRunning = newState;
+      Game.isRunning = newState;
       function intervel() {
         Game.gameView.count += 1;
         Game.gameField.nextGeneration();
@@ -80,11 +82,10 @@ export class Game {
           Game.gameView.changeCondition("these are immortal cells");
           Game.gameField.bothStepsAreEqual = false;
         }
-        Game.gameView.Counter(Game.gameView.count, newState, allZero);
+        Game.gameView.counter(Game.gameView.count, newState, allZero);
       }
       if (Game.gameView.isRunning) {
         Game.timerId = setInterval(intervel, Game.stepDurationMs);
-        intervel();
       } else {
         clearInterval(Game.timerId);
         field = Game.gameField.getState();

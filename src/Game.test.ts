@@ -43,7 +43,7 @@ describe("Game", () => {
     }),
     nextStepGameField: jest.fn(),
     changeCondition: jest.fn(),
-    Counter: jest.fn(),
+    counter: jest.fn(),
     isRunning: false,
     count: 0,
   });
@@ -123,68 +123,68 @@ describe("Game", () => {
 
       onGameStateChange(true);
 
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(1);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(0);
       expect(gameView.updateGameState).toHaveBeenCalledTimes(2);
+      await sleep(stepDurationMs);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(1);
+      expect(gameField.getState).toHaveBeenCalledTimes(2);
+      expect(gameView.updateGameField).toHaveBeenCalledTimes(2);
       await sleep(stepDurationMs);
       expect(gameField.nextGeneration).toHaveBeenCalledTimes(2);
       expect(gameField.getState).toHaveBeenCalledTimes(3);
       expect(gameView.updateGameField).toHaveBeenCalledTimes(3);
-      await sleep(stepDurationMs);
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(3);
-      expect(gameField.getState).toHaveBeenCalledTimes(4);
-      expect(gameView.updateGameField).toHaveBeenCalledTimes(4);
       // expect(gameView.updateGameState).toHaveBeenCalledTimes(4);
 
       onGameStateChange(false);
 
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(3);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(2);
       expect(gameView.updateGameState).toHaveBeenCalledTimes(3);
       await sleep(stepDurationMs);
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(3);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(2);
       expect(gameView.updateGameState).toHaveBeenCalledTimes(3);
-      expect(gameField.getState).toHaveBeenCalledTimes(5);
-      expect(gameView.updateGameField).toHaveBeenCalledTimes(5);
+      expect(gameField.getState).toHaveBeenCalledTimes(4);
+      expect(gameView.updateGameField).toHaveBeenCalledTimes(4);
       await sleep(stepDurationMs);
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(3);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(2);
       // expect(gameView.updateGameState).toHaveBeenCalledTimes(5);
-      expect(gameField.getState).toHaveBeenCalledTimes(5);
-      expect(gameView.updateGameField).toHaveBeenCalledTimes(5);
+      expect(gameField.getState).toHaveBeenCalledTimes(4);
+      expect(gameView.updateGameField).toHaveBeenCalledTimes(4);
       await sleep(stepDurationMs);
       // expect(gameView.updateGameState).toHaveBeenCalledTimes(5);
-      expect(gameField.getState).toHaveBeenCalledTimes(5);
-      expect(gameView.updateGameField).toHaveBeenCalledTimes(5);
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(3);
+      expect(gameField.getState).toHaveBeenCalledTimes(4);
+      expect(gameView.updateGameField).toHaveBeenCalledTimes(4);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(2);
 
       onGameStateChange(true);
 
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(4);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(2);
       expect(gameView.updateGameState).toHaveBeenCalledTimes(4);
+      expect(gameField.getState).toHaveBeenCalledTimes(4);
+      expect(gameView.updateGameField).toHaveBeenCalledTimes(4);
+      await sleep(stepDurationMs);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(3);
+      expect(gameView.updateGameState).toHaveBeenCalledTimes(4);
+      expect(gameField.getState).toHaveBeenCalledTimes(5);
+      expect(gameView.updateGameField).toHaveBeenCalledTimes(5);
+      await sleep(stepDurationMs);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(4);
       expect(gameField.getState).toHaveBeenCalledTimes(6);
       expect(gameView.updateGameField).toHaveBeenCalledTimes(6);
-      await sleep(stepDurationMs);
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(5);
-      expect(gameView.updateGameState).toHaveBeenCalledTimes(4);
-      expect(gameField.getState).toHaveBeenCalledTimes(7);
-      expect(gameView.updateGameField).toHaveBeenCalledTimes(7);
-      await sleep(stepDurationMs);
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(6);
-      expect(gameField.getState).toHaveBeenCalledTimes(8);
-      expect(gameView.updateGameField).toHaveBeenCalledTimes(8);
       expect(gameView.updateGameState).toHaveBeenCalledTimes(4);
 
       onGameStateChange(false);
 
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(6);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(4);
       expect(gameView.updateGameState).toHaveBeenCalledTimes(5);
       await sleep(stepDurationMs);
-      expect(gameField.getState).toHaveBeenCalledTimes(9);
-      expect(gameView.updateGameField).toHaveBeenCalledTimes(9);
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(6);
+      expect(gameField.getState).toHaveBeenCalledTimes(7);
+      expect(gameView.updateGameField).toHaveBeenCalledTimes(7);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(4);
       await sleep(stepDurationMs);
-      expect(gameField.getState).toHaveBeenCalledTimes(9);
-      expect(gameView.updateGameField).toHaveBeenCalledTimes(9);
+      expect(gameField.getState).toHaveBeenCalledTimes(7);
+      expect(gameView.updateGameField).toHaveBeenCalledTimes(7);
       expect(gameView.updateGameState).toHaveBeenCalledTimes(5);
-      expect(gameField.nextGeneration).toHaveBeenCalledTimes(6);
+      expect(gameField.nextGeneration).toHaveBeenCalledTimes(4);
     });
   });
 });
