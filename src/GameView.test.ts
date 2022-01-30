@@ -228,7 +228,7 @@ describe("GameView", () => {
     });
     it("calls onFieldSizeChange on field size change interaction", () => {
       const onFieldSizeChange = jest.fn();
-      gameView.onFieldSizeChange(onFieldSizeChange); // replaced
+      gameView.onFieldSizeChange(onFieldSizeChange);
       [
         [33, 66],
         [22, 12],

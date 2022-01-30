@@ -2,9 +2,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-// const HandlebarsPlugin = require("handlebars-webpack-plugin");
-
-// const webpack = require("webpack");
 const path = require("path");
 
 module.exports = {
@@ -27,24 +24,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({ template: "./src/index.html" }),
     new MiniCssExtractPlugin(),
-
     new CleanWebpackPlugin(),
-
-    // new webpack.HotModuleReplacementPlugin(),
-    // new HandlebarsPlugin({
-    //     // path to hbs entry file(s). Also supports nested directories if write path.join(process.cwd(), "app", "src", "**", "*.hbs"),
-    //     entry: path.join(process.cwd(), "pages", "*.hbs"),
-    //     // output path and filename(s). This should lie within the webpacks output-folder
-    //     // if ommited, the input filepath stripped of its extension will be used
-    //     output: path.join(process.cwd(), "dist", "[name].html"),
-    //     // you can also add a [path] variable, which will emit the files with their relative path, like
-    //     // output: path.join(process.cwd(), "build", [path], "[name].html"),
-
-    //     // globbed path to partials, where folder/filename is unique
-    //     partials: [
-    //         path.join(process.cwd(), "partials", "**", "*.hbs")
-    //     ],
-    // })
   ],
   optimization: {
     minimizer: [`...`, new CssMinimizerPlugin()],

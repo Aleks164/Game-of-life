@@ -107,7 +107,6 @@ describe("Game", () => {
     });
 
     it("is able to start/stop game with onGameStateChange", async () => {
-      // https://github.com/codesandbox/codesandbox-client/issues/513
       expect(gameView.updateGameState).toHaveBeenCalledTimes(1);
       expect(gameField.getState).toHaveBeenCalledTimes(1);
       expect(gameView.updateGameField).toHaveBeenCalledTimes(1);
@@ -133,8 +132,6 @@ describe("Game", () => {
       expect(gameField.nextGeneration).toHaveBeenCalledTimes(2);
       expect(gameField.getState).toHaveBeenCalledTimes(3);
       expect(gameView.updateGameField).toHaveBeenCalledTimes(3);
-      // expect(gameView.updateGameState).toHaveBeenCalledTimes(4);
-
       onGameStateChange(false);
 
       expect(gameField.nextGeneration).toHaveBeenCalledTimes(2);
@@ -146,11 +143,9 @@ describe("Game", () => {
       expect(gameView.updateGameField).toHaveBeenCalledTimes(4);
       await sleep(stepDurationMs);
       expect(gameField.nextGeneration).toHaveBeenCalledTimes(2);
-      // expect(gameView.updateGameState).toHaveBeenCalledTimes(5);
       expect(gameField.getState).toHaveBeenCalledTimes(4);
       expect(gameView.updateGameField).toHaveBeenCalledTimes(4);
       await sleep(stepDurationMs);
-      // expect(gameView.updateGameState).toHaveBeenCalledTimes(5);
       expect(gameField.getState).toHaveBeenCalledTimes(4);
       expect(gameView.updateGameField).toHaveBeenCalledTimes(4);
       expect(gameField.nextGeneration).toHaveBeenCalledTimes(2);
